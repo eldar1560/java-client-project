@@ -302,7 +302,9 @@ public class MyModel extends CommonModel {
 		try {
 			in = new MyDecompressorInputStream(new FileInputStream(fileName + ".maz"));
 			isOpen = true;
-			byte b[] = new byte[4096];
+			byte bSize[] = new byte[3];
+			in.read(bSize);
+			byte b[] = new byte[9+bSize[0] * bSize[1] *bSize[2]];
 			in.read(b);
 			loaded = new Maze3d(b);
 		}

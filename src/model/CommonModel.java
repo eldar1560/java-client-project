@@ -12,6 +12,7 @@ import java.util.Observable;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import presenter.Presenter;
 /**
  * CommonModel implements Model interface
  * abstract class of the model
@@ -24,7 +25,7 @@ public abstract class CommonModel extends Observable implements Model{
 	PrintWriter outToServer;
 	BufferedReader inFromServer;
 	Socket theServer;
-	//Presenter presenter;
+	Presenter presenter;
 	HashMap<String, Maze3d> hm;
 	HashMap<Maze3d, Solution<Position>> hashSolution;
 	
