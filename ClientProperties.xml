@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_60" class="java.beans.XMLDecoder">
+ <object class="presenter.Properties">
+ <void property="x">
+   <int>4</int>
+  </void> <void property="y">
+   <int>4</int>
+  </void>
+  <void property="z">
+   <int>4</int>
+  </void>
+ <void property="name">
+   <string>MyMaze</string>
+  </void>
+ </object>
+</java>
