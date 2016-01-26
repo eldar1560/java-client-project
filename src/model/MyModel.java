@@ -12,24 +12,11 @@ import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.util.HashMap;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import io.MyCompressorOutputStream;
-
-import algorithms.demo.SearchableMaze;
 import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.MyMaze3dGenerator;
 import algorithms.mazeGenerators.Position;
-import algorithms.mazeGenerators.PrimMaze3dGenerator;
-import algorithms.mazeGenerators.SimpleMaze3dGenerator;
-import algorithms.search.AStar;
-import algorithms.search.BFS;
-import algorithms.search.CostComparator;
-import algorithms.search.MazeAirDistance;
-import algorithms.search.MazeManhattenDistance;
 import algorithms.search.Solution;
 import algorithms.search.State;
 import io.MyDecompressorInputStream;
@@ -152,7 +139,7 @@ public class MyModel extends CommonModel {
 		
 		outToServer.println("GetMaze");
 		outToServer.flush();
-		System.out.println(9 +(x*y*z));
+		
 		try {
 			for(int i = 0; i < 9 + x*y*z; i++){
 				
@@ -639,13 +626,16 @@ public class MyModel extends CommonModel {
 		}
 		outToServer.println("GetSolution");
 		outToServer.flush();
-		String stringSolution = null;
-
+		String stringSolution = "";
+		String current = "";
 		try {
-			while(inFromServer.readLine()!= null)
-			{
-				stringSolution += inFromServer.readLine();
-				stringSolution += "\n";
+			String sizeStr = inFromServer.readLine();
+			int size = Integer.parseInt(sizeStr);
+			for (int i = 0; i < size ; i++) {
+				current = inFromServer.readLine();
+				stringSolution += current;
+				if(i> 0)
+					stringSolution += ",";
 			}
 		} catch (IOException e) {
 			setChanged();
@@ -653,7 +643,7 @@ public class MyModel extends CommonModel {
 			return;
 		}
 		
-		String[] positionsSolution = stringSolution.split("\n");
+		String[] positionsSolution = stringSolution.split(",");
 		Solution<Position> solution = new Solution<Position>();
 		
 		for(int i = 0; i < positionsSolution.length; i++){
