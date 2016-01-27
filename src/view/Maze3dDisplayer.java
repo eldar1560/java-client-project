@@ -32,6 +32,7 @@ public class Maze3dDisplayer extends MazeDisplayer{
 	Thread run;
 	boolean running;
 	MenuItem mi;
+	double scale;
 	 /**
      * DisplayMaze3D constructor
      */
@@ -62,6 +63,20 @@ public class Maze3dDisplayer extends MazeDisplayer{
 		exitZ = maze.getGoalPosition().getZ();
 	}
 
+	/**
+	 * get the scale(the number that responsible for the zoom in/out)
+	 * @return
+	 */
+     public double getScale() {
+		return scale;
+	}
+    /**
+     * set the scale 
+     * @param scale the number that responsible for the zoom in/out
+     */
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
      /**
       * draw the maze 3d and the character
       */
@@ -74,7 +89,7 @@ public class Maze3dDisplayer extends MazeDisplayer{
 		Image down = new Image(getDisplay(), "resources/down.jpg");
 		Image upAndDown = new Image(getDisplay(), "resources/upanddown.png");
 		setBackground(new Color(null, 255, 255, 255));
-		
+		scale = 0;
 		
     	addPaintListener(new PaintListener() {
 			
@@ -83,11 +98,16 @@ public class Maze3dDisplayer extends MazeDisplayer{
 				   e.gc.setForeground(new Color(null,255,255,255));
 				   e.gc.setBackground(new Color(null,255,255,255));
 
+				   if (scale < 0) {
+					   scale = 0;
+				   }
+				   
 				   int width=getSize().x;
 				   int height=getSize().y;
 
-				   int w=width/maze.getMaze()[0][0].length;
-				   int h=height/maze.getMaze()[0].length;
+				   int w = (int) (((width)/maze.getMaze()[0][0].length)*(1+scale));
+				   int h = (int) (((height)/maze.getMaze()[0].length)*(1+scale));
+				   
 				   
 				   if(characterX == exitX && characterZ == exitZ && characterY == exitY)
 					   e.gc.drawImage(endGame, 0, 0, 263, 192, 0, 0, getSize().x, getSize().y);

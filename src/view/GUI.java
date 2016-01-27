@@ -10,6 +10,8 @@ import java.util.HashMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Event;
@@ -328,7 +330,16 @@ public class GUI extends BasicWindow implements UserChoice{
 					}	
 			}
 		});
-		
+		shell.addMouseWheelListener(new MouseWheelListener(){
+
+			@Override
+			public void mouseScrolled(MouseEvent arg0) {
+				if((arg0.stateMask & SWT.CTRL)!=0){ 
+					mazeDisplay.setScale(mazeDisplay.getScale()+(arg0.count/3)/10.0);
+					mazeDisplay.redraw();
+				}	
+			}
+		});
 	}
 
 
