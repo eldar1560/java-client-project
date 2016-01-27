@@ -31,6 +31,7 @@ import presenter.Properties;
 
 public class MyModel extends CommonModel {
 	HashMap<Maze3d,String> mazeFile;
+	HashMap<String,Maze3d> loadedMaze;
 	int x;
 	int y;
 	int z;
@@ -46,6 +47,7 @@ public class MyModel extends CommonModel {
 		this.properties = properties;
 		setProperties(properties);
 		mazeFile = new HashMap<Maze3d,String>();
+		loadedMaze = new HashMap<String,Maze3d>();
 		load();
 	}	
 	
@@ -64,7 +66,17 @@ public class MyModel extends CommonModel {
 	@Override
 	public void generate3dMaze(String name,int y, int z, int x) {
 		this.name = name;
-		byte[] bb = new byte[36 + x*y*z];
+		
+		if(loadedMaze.containsKey(name))
+		{
+			Maze3d loaded = loadedMaze.get(name);
+			setChanged();
+			notifyObservers(loaded);
+			setChanged();
+			notifyObservers("Maze '" + name + "' is ready");
+			return; 
+		}
+		byte[] bb = new byte[9 + x*y*z];
 		byte b;
 		String pid = null;
 		String hostName = null;
@@ -112,7 +124,7 @@ public class MyModel extends CommonModel {
 	
 	@Override
 	public void generate3dMaze() {
-		byte[] bb = new byte[36 + x*y*z];
+		byte[] bb = new byte[9 + x*y*z];
 		byte b;
 		String pid = null;
 		String hostName = null;
@@ -299,12 +311,16 @@ public class MyModel extends CommonModel {
 		}
 			
 		InputStream in=null;
+		InputStream inSize = null;
 		try {
 			in = new MyDecompressorInputStream(new FileInputStream(fileName + ".maz"));
+			inSize = new MyDecompressorInputStream(new FileInputStream(fileName + ".maz"));
 			isOpen = true;
+			
 			byte bSize[] = new byte[3];
-			in.read(bSize);
-			byte b[] = new byte[9+bSize[0] * bSize[1] *bSize[2]];
+			inSize.read(bSize);
+			
+			byte b[] = new byte[bSize[0]*bSize[1]*bSize[2] + 9];
 			in.read(b);
 			loaded = new Maze3d(b);
 		}
@@ -328,7 +344,10 @@ public class MyModel extends CommonModel {
 		{
 			try {
 				if(isOpen)
+				{
+					inSize.close();
 					in.close();
+				}
 			} catch (IOException e) 
 			{
 				setChanged();
@@ -337,6 +356,7 @@ public class MyModel extends CommonModel {
 		}
 			
 		hm.put(name, loaded);
+		loadedMaze.put(name, loaded);
 		mazeFile.put(loaded, fileName + ".maz");
 		setChanged();
 		notifyObservers("Loaded the maze '" + name + "' successfully");
@@ -387,14 +407,6 @@ public class MyModel extends CommonModel {
 			notifyObservers(e.getMessage());
 		}
 		save();
-		/*save();
-		threadpool.shutdown();
-		try {
-			while(!(threadpool.awaitTermination(10, TimeUnit.SECONDS)));
-		} catch (InterruptedException e) {
-			setChanged();
-			notifyObservers(e.getMessage());
-		}*/
 	}
 	/**
 	 * save the hash maps to the zip
