@@ -124,6 +124,15 @@ public class MyModel extends CommonModel {
 	
 	@Override
 	public void generate3dMaze() {
+		if(loadedMaze.containsKey(name))
+		{
+			Maze3d loaded = loadedMaze.get(name);
+			setChanged();
+			notifyObservers(loaded);
+			setChanged();
+			notifyObservers("Maze '" + name + "' is ready");
+			return; 
+		}
 		byte[] bb = new byte[9 + x*y*z];
 		byte b;
 		String pid = null;
@@ -608,22 +617,38 @@ public class MyModel extends CommonModel {
 	}
 	@Override
 	public void solve() {
-		String pid = null;
-		String hostName = null;
-		
-		try{
-			pid = ((ManagementFactory.getRuntimeMXBean().getName()).split("@")[0]);
-			hostName = InetAddress.getLocalHost().getHostName();
+		if(loadedMaze.containsKey(name))
+		{
+			outToServer.println("solve " +"loaded");
+			outToServer.flush();
+			Maze3d maze = loadedMaze.get(name);
+			outToServer.println(maze.getMaze().length);
+			outToServer.println(maze.getMaze()[0].length);
+			outToServer.println(maze.getMaze()[0][0].length);
+			byte[] bb = maze.toByteArray();
+			for(byte b : bb){
+				outToServer.write((int)b);
+				outToServer.flush();
+			}
 		}
-		catch(Exception e){
-			setChanged();
-			notifyObservers(e.getMessage());
+		else
+		{
+			String pid = null;
+			String hostName = null;
+			
+			try{
+				pid = ((ManagementFactory.getRuntimeMXBean().getName()).split("@")[0]);
+				hostName = InetAddress.getLocalHost().getHostName();
+			}
+			catch(Exception e){
+				setChanged();
+				notifyObservers(e.getMessage());
+			}
+			
+			String name = this.name;
+			outToServer.println("solve " + name + number + "@" + pid + "@" + hostName);
+			outToServer.flush();
 		}
-		
-		String name = this.name;
-		outToServer.println("solve " + name + number + "@" + pid + "@" + hostName);
-		outToServer.flush();
-		
 		String line = null;
 		try {
 			while(!(line = inFromServer.readLine()).equals("doneSolve!") &&
