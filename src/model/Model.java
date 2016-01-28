@@ -10,7 +10,11 @@ import presenter.Properties;
 
 public interface Model {
 	/**
-	 * close all the open threads and files
+	 * <strong>exit</strong>
+	 * <p>
+	 * <code>public void exit()</code>
+	 * <p>
+	 * Exit method, that closes the run method, all the threads and saves the cache. 
 	 */
 	void exit();
 	/**
@@ -88,6 +92,15 @@ public interface Model {
 	 */
 	void solve();
 	
+	/**
+	 * <strong>setProperties</strong>
+	 * <p>
+	 * <code>public void setProperties(Properties properties)</code>
+	 * <p>
+	 * Setting the properties of the program from the XML properties file to the MyModel variables
+	 * @return properties The properties object that contains the properties
+	 * @see XMLDecoder
+	 */
 	void setProperties(Properties properties);
 	
 	/**

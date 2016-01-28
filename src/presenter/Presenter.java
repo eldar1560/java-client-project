@@ -22,7 +22,8 @@ import model.Model;
 import view.View;
 
 /**
- * Presenter class - set the update function and connect between model and view
+ * Class of the presenter that connects between the model and the view
+ * responsible to notify and update.
  * @author Eldar ,Ofek
  *
  */
@@ -31,7 +32,11 @@ public class Presenter implements Observer {
 	Model model;
 	HashMap<String,Command> hash;
 	/**
-	 * Presenter constructor - get Model and View
+	 * <strong>Presenter</strong>
+	 * <p>
+	 * <code>public Presenter(Model model, View view)</code>
+	 * <p>
+	 * Presenter's constructor - get Model and View
 	 * initialize the model and view
 	 * create the HashMap from String to Command
 	 * @param model - get object from type Model
@@ -75,9 +80,7 @@ public class Presenter implements Observer {
 	 * @return -View view
 	 */	
 	public View getView(){ return view; }
-	/**
-	 * connects between the model and the view
-	 */
+	//update - observer java doc
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o == view)
