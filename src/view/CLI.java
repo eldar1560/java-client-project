@@ -38,7 +38,9 @@ public class CLI implements UserChoice{
 				try {
 					while ((s = in.readLine()).equals("exit") != true) {
 						String[] command = s.split(" ",2);		
-						if(hm.containsKey(command[0]) == true)
+						if(s.equals("newConnection"))
+							view.notifyMe(s);
+						else if(hm.containsKey(command[0]) == true)
 							view.notifyMe(command);
 						else
 						{

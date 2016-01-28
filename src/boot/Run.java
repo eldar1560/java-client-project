@@ -34,7 +34,7 @@ public class Run {
 		if(properties.getUc().equals("CLI"))
 		{
 			uc = new CLI(new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out));
-			System.out.println("You need to choose one of the following commands every time:\ndir <path>\ngenerate3dMaze <name> <y> <z> <x>\ndisplay <name>\ndisplayCrossSectionBy <X,Y or Z> <index> <name>\nsaveMaze <name> <file name>\nloadMaze <file name> <name>\nmazeSize <name>\nfileSize <name>\nsolve <name> <algorithm>\ndisplaySolution <name>\nexit");
+			System.out.println("You need to choose one of the following commands every time:\ndir <path>\ngenerate3dMaze <name> <y> <z> <x>\ndisplay <name>\ndisplayCrossSectionBy <X,Y or Z> <index> <name>\nsaveMaze <name> <file name>\nloadMaze <file name> <name>\nmazeSize <name>\nfileSize <name>\nsolve <name> <algorithm>\ndisplaySolution <name>\nnewConnection\nexit");
 		}else if(properties.getUc().equals("GUI"))
 			uc = new GUI("Maze3D Game", 1200, 800);
 		
