@@ -18,7 +18,7 @@ public class Properties implements Serializable{
 		this.y = 6;
 		this.z = 6;
 		this.name = "Maze1";
-		this.uc = "CLI";
+		this.uc = "GUI";
 		this.port = 5400;
 		this.ip = "127.0.0.1";
 	}
